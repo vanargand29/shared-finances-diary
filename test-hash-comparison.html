@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test MD5 Hash Comparison</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+    <h1>MD5 Hash Comparison Test</h1>
+    
+    <h2>Test Password: JayaLintang123</h2>
+    <div id="result"></div>
+
+    <h2>Test Password: Gratis123</h2>
+    <div id="result2"></div>
+
+    <script>
+        // Test JayaLintang123
+        const password1 = 'JayaLintang123';
+        const hash1 = CryptoJS.MD5(password1).toString();
+        
+        document.getElementById('result').innerHTML = `
+            <p><strong>Password:</strong> ${password1}</p>
+            <p><strong>CryptoJS MD5:</strong> ${hash1}</p>
+            <p><strong>Length:</strong> ${hash1.length}</p>
+            <p><strong>PostgreSQL md5():</strong> Jalankan di SQL: SELECT md5('${password1}')</p>
+        `;
+
+        // Test Gratis123
+        const password2 = 'Gratis123';
+        const hash2 = CryptoJS.MD5(password2).toString();
+        
+        document.getElementById('result2').innerHTML = `
+            <p><strong>Password:</strong> ${password2}</p>
+            <p><strong>CryptoJS MD5:</strong> ${hash2}</p>
+            <p><strong>Length:</strong> ${hash2.length}</p>
+            <p><strong>PostgreSQL md5():</strong> Jalankan di SQL: SELECT md5('${password2}')</p>
+        `;
+
+        // Log to console
+        console.log('=== MD5 Hash Test ===');
+        console.log('JayaLintang123 hash:', hash1);
+        console.log('Gratis123 hash:', hash2);
+    </script>
+</body>
+</html>

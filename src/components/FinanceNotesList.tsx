@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Lock, Users } from 'lucide-react';
 import { FinanceNote } from '@/pages/Dashboard';
+import { PrivateCategory } from './PrivateCategoryManager';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,25 +15,61 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { format, parseISO } from 'date-fns';
+import { id as localeId } from 'date-fns/locale';
 
 interface FinanceNotesListProps {
   notes: FinanceNote[];
   onEdit: (note: FinanceNote) => void;
   onDelete: (id: string) => void;
   currentUserId: string;
+  privateCategories: PrivateCategory[];
+  showCategoryGrouping: boolean;
 }
 
-export function FinanceNotesList({ notes, onEdit, onDelete, currentUserId }: FinanceNotesListProps) {
+export function FinanceNotesList({ notes, onEdit, onDelete, currentUserId, privateCategories, showCategoryGrouping }: FinanceNotesListProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('id-ID', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
     });
   };
+
+  // Group notes by category (for private) or month (for shared)
+  const groupedNotes = notes.reduce((groups, note) => {
+    let groupKey: string;
+    
+    if (showCategoryGrouping && note.private_category_id) {
+      // Group by category for private notes
+      const category = privateCategories.find(c => c.id === note.private_category_id);
+      groupKey = category ? category.name : 'Tanpa Kategori';
+    } else {
+      // Group by month for shared notes or uncategorized
+      const transactionDate = note.transaction_date || note.created_at;
+      groupKey = format(parseISO(transactionDate), 'MMMM yyyy', { locale: localeId });
+    }
+    
+    if (!groups[groupKey]) {
+      groups[groupKey] = [];
+    }
+    groups[groupKey].push(note);
+    return groups;
+  }, {} as Record<string, FinanceNote[]>);
+
+  // Sort groups
+  const sortedGroups = Object.keys(groupedNotes).sort((a, b) => {
+    if (showCategoryGrouping) {
+      // Sort alphabetically for categories
+      return a.localeCompare(b, 'id-ID');
+    } else {
+      // Sort by date for months (newest first)
+      const dateA = parseISO(groupedNotes[a][0].transaction_date || groupedNotes[a][0].created_at);
+      const dateB = parseISO(groupedNotes[b][0].transaction_date || groupedNotes[b][0].created_at);
+      return dateB.getTime() - dateA.getTime();
+    }
+  });
 
   if (notes.length === 0) {
     return (
@@ -48,10 +85,32 @@ export function FinanceNotesList({ notes, onEdit, onDelete, currentUserId }: Fin
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <h2 className="text-2xl font-bold">Daftar Catatan</h2>
-      <div className="grid gap-4">
-        {notes.map((note) => (
+      {sortedGroups.map((groupKey) => {
+        const monthNotes = groupedNotes[groupKey];
+        const totalIncome = monthNotes
+          .filter(note => note.type === 'income')
+          .reduce((sum, note) => sum + Number(note.amount), 0);
+        const totalExpense = monthNotes
+          .filter(note => note.type === 'expense')
+          .reduce((sum, note) => sum + Number(note.amount), 0);
+
+        return (
+          <div key={groupKey} className="space-y-3">
+            <div className="flex items-center justify-between bg-muted/50 p-4 rounded-lg">
+              <h3 className="text-xl font-semibold capitalize">{groupKey}</h3>
+              <div className="flex gap-4 text-sm">
+                <span className="text-success font-medium">
+                  Pemasukan: Rp {totalIncome.toLocaleString('id-ID')}
+                </span>
+                <span className="text-danger font-medium">
+                  Pengeluaran: Rp {totalExpense.toLocaleString('id-ID')}
+                </span>
+              </div>
+            </div>
+            <div className="grid gap-4">
+              {monthNotes.map((note) => (
           <Card
             key={note.id}
             className={`shadow-lg hover:shadow-xl transition-all border-l-4 ${
@@ -78,7 +137,7 @@ export function FinanceNotesList({ notes, onEdit, onDelete, currentUserId }: Fin
                     )}
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {formatDate(note.created_at)}
+                    {formatDate(note.transaction_date || note.created_at)}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -145,7 +204,10 @@ export function FinanceNotesList({ notes, onEdit, onDelete, currentUserId }: Fin
             </CardContent>
           </Card>
         ))}
-      </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

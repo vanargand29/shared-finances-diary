@@ -22,7 +22,9 @@ export type Database = {
           group_id: string | null
           id: string
           is_private: boolean | null
+          private_category_id: string | null
           title: string
+          transaction_date: string | null
           type: string
           updated_at: string | null
           user_id: string | null
@@ -34,7 +36,9 @@ export type Database = {
           group_id?: string | null
           id?: string
           is_private?: boolean | null
+          private_category_id?: string | null
           title: string
+          transaction_date?: string | null
           type: string
           updated_at?: string | null
           user_id?: string | null
@@ -46,7 +50,9 @@ export type Database = {
           group_id?: string | null
           id?: string
           is_private?: boolean | null
+          private_category_id?: string | null
           title?: string
+          transaction_date?: string | null
           type?: string
           updated_at?: string | null
           user_id?: string | null
@@ -60,7 +66,43 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "financial_notes_private_category_id_fkey"
+            columns: ["private_category_id"]
+            isOneToOne: false
+            referencedRelation: "private_categories"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "financial_notes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      private_categories: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "private_categories_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -133,23 +175,67 @@ export type Database = {
           },
         ]
       }
+      password_reset_tokens: {
+        Row: {
+          created_at: string | null
+          expires_at: string
+          id: string
+          token: string
+          used: boolean | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          token: string
+          used?: boolean | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          token?: string
+          used?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "password_reset_tokens_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           created_at: string | null
           id: string
+          name: string | null
           password_hash: string
+          phone: string | null
+          updated_at: string | null
           username: string
         }
         Insert: {
           created_at?: string | null
           id?: string
+          name?: string | null
           password_hash: string
+          phone?: string | null
+          updated_at?: string | null
           username: string
         }
         Update: {
           created_at?: string | null
           id?: string
+          name?: string | null
           password_hash?: string
+          phone?: string | null
+          updated_at?: string | null
           username?: string
         }
         Relationships: []
