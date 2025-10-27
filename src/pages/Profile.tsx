@@ -262,41 +262,41 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10">
-      <div className="container mx-auto p-6 max-w-4xl">
+      <div className="container mx-auto p-4 sm:p-6 max-w-4xl">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate('/dashboard')}
-            className="hover:bg-primary/10"
+            className="hover:bg-primary/10 flex-shrink-0"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Profile Saya
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Kelola informasi akun Anda
             </p>
           </div>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-4 sm:gap-6">
           {/* Profile Information Card */}
           <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="px-4 sm:px-6">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <User className="h-5 w-5" />
                 Informasi Profile
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm">
                 Update informasi pribadi Anda
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleUpdateProfile} className="space-y-4">
+            <CardContent className="px-4 sm:px-6">
+              <form onSubmit={handleUpdateProfile} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Nama Lengkap</Label>
                   <Input
@@ -343,17 +343,17 @@ const Profile = () => {
 
           {/* Change Password Card */}
           <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="px-4 sm:px-6">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <Lock className="h-5 w-5" />
                 Ubah Password
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm">
                 Pastikan password Anda aman dan kuat
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleChangePassword} className="space-y-4">
+            <CardContent className="px-4 sm:px-6">
+              <form onSubmit={handleChangePassword} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="currentPassword">Password Saat Ini</Label>
                   <div className="relative">

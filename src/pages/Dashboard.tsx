@@ -163,39 +163,39 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10">
-      <div className="container mx-auto p-6 max-w-7xl">
+      <div className="container mx-auto p-4 sm:p-6 max-w-7xl">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Catatan Keuangan
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Selamat datang, <span className="font-semibold text-foreground">{user?.name || user?.username}</span>
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Button
               variant="outline"
               onClick={() => navigate('/profile')}
-              className="gap-2 hover:bg-primary/10 hover:text-primary transition-all"
+              className="flex-1 sm:flex-none gap-2 hover:bg-primary/10 hover:text-primary transition-all"
             >
               <User className="h-4 w-4" />
-              Profile
+              <span className="hidden sm:inline">Profile</span>
             </Button>
             <Button
               variant="outline"
               onClick={handleLogout}
-              className="gap-2 hover:bg-destructive hover:text-destructive-foreground transition-all"
+              className="flex-1 sm:flex-none gap-2 hover:bg-destructive hover:text-destructive-foreground transition-all"
             >
               <LogOut className="h-4 w-4" />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20 shadow-lg hover:shadow-xl transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <div>
@@ -211,7 +211,7 @@ const Dashboard = () => {
               <TrendingUp className="h-5 w-5 text-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-success">
+              <div className="text-2xl sm:text-3xl font-bold text-success">
                 Rp {totalIncome.toLocaleString('id-ID')}
               </div>
             </CardContent>
@@ -232,7 +232,7 @@ const Dashboard = () => {
               <TrendingDown className="h-5 w-5 text-danger" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-danger">
+              <div className="text-2xl sm:text-3xl font-bold text-danger">
                 Rp {totalExpense.toLocaleString('id-ID')}
               </div>
             </CardContent>
@@ -257,7 +257,7 @@ const Dashboard = () => {
               <Wallet className={`h-5 w-5 ${balance >= 0 ? 'text-primary' : 'text-destructive'}`} />
             </CardHeader>
             <CardContent>
-              <div className={`text-3xl font-bold ${balance >= 0 ? 'text-primary' : 'text-destructive'}`}>
+              <div className={`text-2xl sm:text-3xl font-bold ${balance >= 0 ? 'text-primary' : 'text-destructive'}`}>
                 Rp {balance.toLocaleString('id-ID')}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -268,15 +268,17 @@ const Dashboard = () => {
         </div>
 
         {/* Tabs for Private/Shared */}
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'private' | 'shared')} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'private' | 'shared')} className="space-y-4 sm:space-y-6">
           <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="private" className="gap-2">
+            <TabsTrigger value="private" className="gap-2 text-xs sm:text-sm">
               <User className="h-4 w-4" />
-              Tabungan Pribadi
+              <span className="hidden sm:inline">Tabungan Pribadi</span>
+              <span className="sm:hidden">Pribadi</span>
             </TabsTrigger>
-            <TabsTrigger value="shared" className="gap-2">
+            <TabsTrigger value="shared" className="gap-2 text-xs sm:text-sm">
               <Users className="h-4 w-4" />
-              Tabungan Bersama
+              <span className="hidden sm:inline">Tabungan Bersama</span>
+              <span className="sm:hidden">Bersama</span>
             </TabsTrigger>
           </TabsList>
 

@@ -113,13 +113,13 @@ export function FinanceNoteDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="max-w-[95vw] sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">
+          <DialogTitle className="text-xl sm:text-2xl">
             {editingNote ? 'Edit Catatan' : 'Tambah Catatan Baru'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Judul</Label>
             <Input
@@ -158,17 +158,19 @@ export function FinanceNoteDialog({
           <div className="space-y-2">
             <Label>Tipe</Label>
             <RadioGroup value={type} onValueChange={(value) => setType(value as 'income' | 'expense')}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="income" id="income" />
-                <Label htmlFor="income" className="font-normal cursor-pointer">
-                  Pemasukan
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="expense" id="expense" />
-                <Label htmlFor="expense" className="font-normal cursor-pointer">
-                  Pengeluaran
-                </Label>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="income" id="income" />
+                  <Label htmlFor="income" className="font-normal cursor-pointer">
+                    Pemasukan
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="expense" id="expense" />
+                  <Label htmlFor="expense" className="font-normal cursor-pointer">
+                    Pengeluaran
+                  </Label>
+                </div>
               </div>
             </RadioGroup>
           </div>
@@ -202,19 +204,19 @@ export function FinanceNoteDialog({
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1"
+              className="flex-1 w-full"
             >
               Batal
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
-              className="flex-1 bg-gradient-to-r from-primary to-primary/80"
+              className="flex-1 w-full bg-gradient-to-r from-primary to-primary/80"
             >
               {isLoading ? 'Menyimpan...' : editingNote ? 'Perbarui' : 'Simpan'}
             </Button>
