@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import CryptoJS from 'crypto-js';
 
 interface User {
   id: string;
@@ -30,20 +31,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     try {
-      // Simple hash function for MD5 simulation
-      const simpleHash = (str: string): string => {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-          const char = str.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
-          hash = hash & hash;
-        }
-        return Math.abs(hash).toString(16).padStart(32, '0');
-      };
-
-      // Use a simple hash since crypto.subtle.digest doesn't support MD5
-      // In production, use a proper MD5 library
-      const passwordHash = simpleHash(password);
+      // Generate MD5 hash using crypto-js
+      const passwordHash = CryptoJS.MD5(password).toString();
 
       // Query the database
       const { data: userData, error: queryError } = await supabase
